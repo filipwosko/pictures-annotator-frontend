@@ -1,16 +1,12 @@
-import axios from "axios";
-
-const api = axios.create({
-  baseURL: "http://localhost:8080/api"
-});
+import api from "./api";
 
 export default {
-  create(command) {
-    return api.post("/bounding-boxes", command);
+  create(data) {
+    return api.post("/bounding-boxes", data);
   },
 
-  modify(command) {
-    return api.put("/bounding-boxes", command);
+  modify(data) {
+    return api.put("/bounding-boxes", data);
   },
 
   delete(id) {

@@ -22,6 +22,14 @@
 
           <button class="btn btn-primary w-100">Upload</button>
         </form>
+
+        <div v-if="errorMessage" class="mt-3 alert alert-danger">
+          {{ errorMessage }}
+        </div>
+
+        <div v-if="successMessage" class="mt-3 alert alert-success">
+          {{ successMessage }}
+        </div>
       </div>
     </div>
   </div>
@@ -34,9 +42,11 @@ export default {
   data() {
     return {
       file: null,
+      preview: null,
       width: 0,
       height: 0,
-      preview: null
+      errorMessage: null,
+      successMessage: null
     };
   },
   methods: {
@@ -51,6 +61,7 @@ export default {
       reader.onload = (event) => {
         this.preview = event.target.result;
 
+        // Odczyt wymiarów obrazka
         const img = new Image();
         img.onload = () => {
           this.width = img.width;
@@ -62,12 +73,16 @@ export default {
     },
 
     async upload() {
+      this.errorMessage = null;
+      this.successMessage = null;
+
       if (!this.file) {
-        alert("Wybierz plik!");
+        this.errorMessage = "Wybierz plik!";
         return;
       }
 
       try {
+        // Konwersja pliku do Base64
         const toBase64 = file =>
           new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -78,6 +93,7 @@ export default {
 
         const base64Data = await toBase64(this.file);
 
+        // Zamiana Base64 na tablicę bajtów
         const byteArray = Array.from(atob(base64Data), c => c.charCodeAt(0));
 
         const command = {
@@ -88,11 +104,16 @@ export default {
         };
 
         await pictureApi.addPicture(command);
-        alert("Obraz dodany!");
-        this.$router.push("/pictures");
+        this.successMessage = "Obraz dodany!";
+        this.file = null;
+        this.preview = null;
+
+        // opcjonalnie przekierowanie po chwili
+        setTimeout(() => this.$router.push("/pictures"), 1000);
+
       } catch (err) {
-        console.error("Błąd przy wysyłaniu obrazu:", err);
-        alert("Nie udało się wysłać obrazu.");
+        // Interceptor w api.js już zwraca message z backendu
+        this.errorMessage = err;
       }
     }
   }

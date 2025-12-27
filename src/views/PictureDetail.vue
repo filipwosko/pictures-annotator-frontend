@@ -1,7 +1,14 @@
 <template>
   <div class="container mt-3">
     <h4>Picture {{ picture.id }}</h4>
-    <small>{{ picture.width }} × {{ picture.height }}</small>
+
+    <div class="text-muted mb-2">
+      <small>
+        Aby dodać bounding box:
+        <strong>kliknij prawym przyciskiem myszy</strong>,
+        przytrzymaj i przeciągnij po obrazie.
+      </small>
+    </div>
 
     <BoundingBoxCanvas
       v-if="imageSrc"
@@ -20,7 +27,11 @@ import boundingBoxApi from "@/services/boundingBoxApi";
 import BoundingBoxCanvas from "@/components/BoundingBoxCanvas.vue";
 
 export default {
-  components: { BoundingBoxCanvas },
+  name: "PictureDetail",
+
+  components: {
+    BoundingBoxCanvas
+  },
 
   data() {
     return {
@@ -38,13 +49,22 @@ export default {
   methods: {
     async load() {
       const res = await pictureApi.getPictureById(this.pictureId);
+
       this.picture = res.data;
+      this.boxes = res.data.boundingBoxes || [];
       this.imageSrc = `data:image/png;base64,${res.data.data}`;
-      this.boxes = res.data.boundingBoxes;
     },
 
     async createBox(box) {
-      await boundingBoxApi.create({ pictureId: this.pictureId, ...box });
+      await boundingBoxApi.create({
+        pictureId: this.pictureId,
+        x: box.x,
+        y: box.y,
+        width: box.width,
+        height: box.height,
+        label: box.label
+      });
+
       await this.load();
     },
 
@@ -67,3 +87,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.container {
+  max-width: 1000px;
+}
+</style>

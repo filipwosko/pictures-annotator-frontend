@@ -6,16 +6,12 @@
       <thead>
         <tr>
           <th>ID</th>
-          <th>Width</th>
-          <th>Height</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="p in pictures" :key="p.id">
           <td>{{ p.id }}</td>
-          <td>{{ p.width }}</td>
-          <td>{{ p.height }}</td>
           <td>
             <button
               class="btn btn-sm btn-primary"
@@ -37,8 +33,12 @@ export default {
     return { pictures: [] };
   },
   async mounted() {
-    const res = await pictureApi.getAllPictures();
-    this.pictures = res.data;
+    try {
+      const res = await pictureApi.getAllPictures();
+      this.pictures = res.data;
+    } catch (err) {
+      console.error("Błąd pobierania obrazów:", err);
+    }
   }
 };
 </script>

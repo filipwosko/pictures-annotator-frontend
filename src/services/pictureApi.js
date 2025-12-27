@@ -1,8 +1,4 @@
-import axios from "axios";
-
-const api = axios.create({
-  baseURL: "http://localhost:8080/api"
-});
+import api from "./api";
 
 export default {
   getAllPictures() {
@@ -14,6 +10,7 @@ export default {
   },
 
   addPicture(command) {
+    // Wysyłamy JSON z tablicą bajtów do backendu
     return api.post("/pictures", command, {
       headers: { "Content-Type": "application/json" }
     });
