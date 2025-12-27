@@ -10,7 +10,7 @@ export default {
   },
 
   addPicture(command) {
-    // Wysyłamy JSON z tablicą bajtów do backendu
+    // Wysyłamy JSON z tablicą bajtów
     return api.post("/pictures", command, {
       headers: { "Content-Type": "application/json" }
     });

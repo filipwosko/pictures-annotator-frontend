@@ -10,12 +10,16 @@ api.interceptors.response.use(
     let message = "Wystąpił nieznany błąd";
 
     if (error.response) {
-      // Backend odpowiedział (400, 404, 415, 500 itd.)
-      message =
-        error.response.data?.message ||
-        `Błąd ${error.response.status}`;
+      // próbujemy odczytać message niezależnie od Content-Type
+      try {
+        const data = typeof error.response.data === "string"
+          ? JSON.parse(error.response.data)
+          : error.response.data;
+        message = data?.message || `Błąd ${error.response.status}`;
+      } catch {
+        message = `Błąd ${error.response.status}`;
+      }
     } else if (error.request) {
-      // Backend nie odpowiada
       message = "Brak połączenia z serwerem";
     }
 

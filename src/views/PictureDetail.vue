@@ -5,7 +5,7 @@
     <div class="text-muted mb-2">
       <small>
         Aby dodać bounding box:
-        <strong>kliknij prawym przyciskiem myszy</strong>,
+        <strong>kliknij lewym przyciskiem myszy</strong>,
         przytrzymaj i przeciągnij po obrazie.
       </small>
     </div>
