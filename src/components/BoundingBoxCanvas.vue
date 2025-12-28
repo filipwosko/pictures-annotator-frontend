@@ -129,8 +129,16 @@ export default {
       }
 
       if (this.moving && this.currentBox) {
-        this.currentBox.x += e.movementX;
-        this.currentBox.y += e.movementY;
+        const box = this.currentBox;
+
+        let newX = box.x + e.movementX;
+        let newY = box.y + e.movementY;
+
+        newX = Math.max(0, Math.min(newX, this.imgRect.width - box.width));
+        newY = Math.max(0, Math.min(newY, this.imgRect.height - box.height));
+
+        box.x = newX;
+        box.y = newY;
       }
 
       if (this.resizing && this.currentBox) {
@@ -178,18 +186,18 @@ export default {
       const bottom = box.y + box.height;
 
       if (this.resizeHandle.includes("n")) {
-        box.height = bottom - my;
-        box.y = my;
+        box.y = Math.max(0, Math.min(my, bottom - 5));
+        box.height = bottom - box.y;
       }
       if (this.resizeHandle.includes("s")) {
-        box.height = my - box.y;
+        box.height = Math.max(5, Math.min(my - box.y, this.imgRect.height - box.y));
       }
       if (this.resizeHandle.includes("w")) {
-        box.width = right - mx;
-        box.x = mx;
+        box.x = Math.max(0, Math.min(mx, right - 5));
+        box.width = right - box.x;
       }
       if (this.resizeHandle.includes("e")) {
-        box.width = mx - box.x;
+        box.width = Math.max(5, Math.min(mx - box.x, this.imgRect.width - box.x));
       }
     },
 
