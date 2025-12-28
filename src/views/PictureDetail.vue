@@ -23,7 +23,6 @@
 
 <script>
 import pictureApi from "@/services/pictureApi";
-import boundingBoxApi from "@/services/boundingBoxApi";
 import BoundingBoxCanvas from "@/components/BoundingBoxCanvas.vue";
 
 export default {
@@ -48,41 +47,55 @@ export default {
 
   methods: {
     async load() {
-      const res = await pictureApi.getPictureById(this.pictureId);
-
-      this.picture = res.data;
-      this.boxes = res.data.boundingBoxes || [];
-      this.imageSrc = `data:image/png;base64,${res.data.data}`;
+      try {
+        const res = await pictureApi.getPictureById(this.pictureId);
+        this.picture = res.data;
+        this.boxes = res.data.boundingBoxes || [];
+        this.imageSrc = `data:image/png;base64,${res.data.data}`;
+      } catch (err) {
+        console.error("Błąd ładowania obrazka:", err);
+      }
     },
 
     async createBox(box) {
-      await boundingBoxApi.create({
-        pictureId: this.pictureId,
-        x: box.x,
-        y: box.y,
-        width: box.width,
-        height: box.height,
-        label: box.label
-      });
-
-      await this.load();
+      try {
+        await pictureApi.addBoundingBox({
+          pictureId: this.pictureId,
+          x: box.x,
+          y: box.y,
+          width: box.width,
+          height: box.height,
+          label: box.label
+        });
+        await this.load();
+      } catch (err) {
+        console.error("Błąd dodawania bounding boxa:", err);
+      }
     },
 
     async updateBox(box) {
-      await boundingBoxApi.modify({
-        id: box.id,
-        pictureId: this.pictureId,
-        x: box.x,
-        y: box.y,
-        width: box.width,
-        height: box.height,
-        label: box.label
-      });
+      try {
+        await pictureApi.modifyBoundingBox({
+          id: box.id,
+          pictureId: this.pictureId,
+          x: box.x,
+          y: box.y,
+          width: box.width,
+          height: box.height,
+          label: box.label
+        });
+      } catch (err) {
+        console.error("Błąd modyfikacji bounding boxa:", err);
+      }
     },
 
     async deleteBox(id) {
-      await boundingBoxApi.delete(id);
-      this.boxes = this.boxes.filter(b => b.id !== id);
+      try {
+        await pictureApi.deleteBoundingBox(this.pictureId, id);
+        this.boxes = this.boxes.filter(b => b.id !== id);
+      } catch (err) {
+        console.error("Błąd usuwania bounding boxa:", err);
+      }
     }
   }
 };
