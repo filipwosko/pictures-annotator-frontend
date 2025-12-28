@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <h4 class="text-center">Add new Picture</h4>
+    <h4 class="text-center">Dodaj Zdjęcie</h4>
 
     <div class="row mt-4">
       <div class="col-md-6 offset-md-3">
@@ -20,7 +20,7 @@
             <img :src="preview" alt="Preview" class="img-fluid" />
           </div>
 
-          <button class="btn btn-primary w-100">Upload</button>
+          <button class="btn btn-primary w-100">Załaduj</button>
         </form>
 
         <div v-if="errorMessage" class="mt-3 alert alert-danger">
@@ -82,7 +82,6 @@ export default {
       }
 
       try {
-        // Konwersja pliku do Base64
         const toBase64 = file =>
           new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -93,7 +92,6 @@ export default {
 
         const base64Data = await toBase64(this.file);
 
-        // Zamiana Base64 na tablicę bajtów
         const byteArray = Array.from(atob(base64Data), c => c.charCodeAt(0));
 
         const command = {
@@ -108,7 +106,6 @@ export default {
         this.file = null;
         this.preview = null;
 
-        // opcjonalnie przekierowanie po chwili
         setTimeout(() => this.$router.push("/pictures"), 1000);
 
       } catch (err) {

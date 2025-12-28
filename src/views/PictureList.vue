@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <h4>Pictures</h4>
+    <h4>Lista zdjęć</h4>
 
     <table class="table mt-3">
       <thead>
@@ -16,7 +16,7 @@
             <button
               class="btn btn-sm btn-primary"
               @click="$router.push(`/pictures/${p.id}`)">
-              Open
+              Otwórz
             </button>
           </td>
         </tr>

@@ -4,8 +4,8 @@
       <a class="navbar-brand">Pictures Annotator</a>
 
       <div class="navbar-nav">
-        <router-link class="nav-link" to="/pictures">Pictures</router-link>
-        <router-link class="nav-link" to="/add-picture">Add Picture</router-link>
+        <router-link class="nav-link" to="/pictures">Lista zdjęć</router-link>
+        <router-link class="nav-link" to="/add-picture">Dodaj zdjęcie</router-link>
       </div>
     </nav>
 

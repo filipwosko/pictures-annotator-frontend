@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-3">
-    <h4>Picture {{ picture.id }}</h4>
+    <h4>Zdjęcie {{ picture.id }}</h4>
 
     <div class="text-muted mb-2">
       <small>
