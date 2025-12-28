@@ -1,9 +1,11 @@
 import axios from "axios";
 
+// Względna ścieżka, żeby requesty szły przez proxy devServer
 const api = axios.create({
-  baseURL: "http://localhost:8080/api"
+  baseURL: "/api"
 });
 
+// Interceptor odpowiedzi – obsługa błędów
 api.interceptors.response.use(
   response => response,
   error => {
